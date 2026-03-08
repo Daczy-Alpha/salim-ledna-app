@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 60 56% 91%; /* Light Beige #F5F5DC */
+    --foreground: 40 10% 20%; /* Dark Brownish Gray */
+    --card: 60 56% 93%; /* Slightly Lighter Beige */
+    --card-foreground: 40 10% 20%;
+    --popover: 60 56% 93%;
+    --popover-foreground: 40 10% 20%;
+    --primary: 120 27% 65%; /* Earthy Green #8FBC8F */
+    --primary-foreground: 0 0% 100%; /* White */
+    --secondary: 120 15% 80%; /* Lighter, desaturated green */
+    --secondary-foreground: 120 25% 30%; /* Darker green */
+    --muted: 60 30% 85%; /* Desaturated beige */
+    --muted-foreground: 60 15% 55%; /* Slightly darker muted text */
+    --accent: 51 100% 50%; /* Golden Yellow #FFD700 */
+    --accent-foreground: 40 100% 10%; /* Dark Brown */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 60 30% 82%; /* Slightly darker/contrasting beige */
+    --input: 60 40% 88%; /* Slightly lighter beige for inputs */
+    --ring: 120 27% 55%; /* A slightly darker shade of primary for focus rings */
+    --chart-1: 120 27% 65%; /* Primary */
+    --chart-2: 51 100% 50%; /* Accent */
+    --chart-3: 120 15% 80%; /* Secondary */
+    --chart-4: 40 10% 40%; /* Mid Gray-Brown */
+    --chart-5: 60 40% 60%; /* Mid Beige */
+    --radius: 0.5rem;
+
+    /* Sidebar specific colors for light theme */
+    --sidebar-background: 120 20% 92%; /* Very light, slightly desaturated green */
+    --sidebar-foreground: 120 30% 25%; /* Dark Green */
+    --sidebar-primary: 120 27% 65%; /* Earthy Green (same as primary) */
+    --sidebar-primary-foreground: 0 0% 100%; /* White */
+    --sidebar-accent: 120 20% 85%; /* Lighter green for hover/active states */
+    --sidebar-accent-foreground: 120 30% 20%; /* Darker Green for text on accent */
+    --sidebar-border: 120 15% 75%; /* Softer green border */
+    --sidebar-ring: 120 27% 55%; /* Ring color (same as main ring) */
+  }
+
+  .dark {
+    --background: 40 10% 15%; /* Dark Brownish Gray */
+    --foreground: 60 50% 92%; /* Light Beige text */
+    --card: 40 10% 20%;
+    --card-foreground: 60 50% 92%;
+    --popover: 40 10% 20%;
+    --popover-foreground: 60 50% 92%;
+    --primary: 120 27% 65%; /* Earthy Green #8FBC8F */
+    --primary-foreground: 40 10% 10%; /* Very Dark Brown/Black */
+    --secondary: 120 20% 30%; /* Darker desaturated green */
+    --secondary-foreground: 120 15% 75%; /* Lighter green text */
+    --muted: 40 10% 25%;
+    --muted-foreground: 60 20% 65%;
+    --accent: 51 100% 50%; /* Golden Yellow #FFD700 */
+    --accent-foreground: 40 100% 10%; /* Dark Brown */
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 40 10% 30%;
+    --input: 40 10% 22%;
+    --ring: 120 27% 55%;
+    --chart-1: 120 27% 65%;
+    --chart-2: 51 100% 50%;
+    --chart-3: 120 20% 40%;
+    --chart-4: 60 20% 70%;
+    --chart-5: 40 10% 60%;
+
+    /* Sidebar specific colors for dark theme */
+    --sidebar-background: 120 25% 20%; /* Dark Green base */
+    --sidebar-foreground: 120 20% 85%; /* Light Greenish text */
+    --sidebar-primary: 120 27% 65%; /* Earthy Green (same as primary) */
+    --sidebar-primary-foreground: 40 10% 10%; /* Very Dark Brown/Black */
+    --sidebar-accent: 120 25% 30%; /* Slightly Lighter Dark Green for hover */
+    --sidebar-accent-foreground: 120 20% 90%; /* Brighter Greenish text on accent */
+    --sidebar-border: 120 20% 25%; /* Darker Green Border */
+    --sidebar-ring: 120 27% 55%; /* Ring color (same as main ring) */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

@@ -1,0 +1,129 @@
+
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import MarketTrendChart from '@/components/MarketTrendChart';
+import { commodityCategories } from '@/data/placeholder';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import type { MarketTrend } from '@/lib/types';
+import { fetchMarketData } from '@/actions/marketActions';
+import { useToast } from '@/hooks/use-toast';
+import { Skeleton } from '@/components/ui/skeleton';
+import { LineChart, Loader2 } from 'lucide-react';
+
+const trendCommodities = [
+    { id: 'maize', name: 'Maize' },
+    { id: 'wheat', name: 'Wheat' },
+    { id: 'coffee', name: 'Coffee' },
+    { id: 'soya', name: 'Soya Beans' }
+];
+
+export default function MarketTrendsPage() {
+  const [activeCommodity, setActiveCommodity] = useState(trendCommodities[0].id);
+  const [trendsData, setTrendsData] = useState<Record<string, MarketTrend | null>>({});
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
+
+  const loadTrendData = useCallback(async (commodityId: string, commodityName: string) => {
+    // If data is already loading or exists, don't fetch again
+    if (trendsData[commodityId] || trendsData[commodityId] === null && isLoading) return;
+
+    setIsLoading(true);
+    setTrendsData(prev => ({ ...prev, [commodityId]: null })); // Set to null to indicate loading
+
+    try {
+      const data = await fetchMarketData(commodityName);
+      if (data) {
+        setTrendsData(prev => ({ ...prev, [commodityId]: data }));
+      } else {
+        throw new Error('Failed to fetch trend data.');
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: 'destructive',
+        title: 'Error Loading Chart',
+        description: `Could not load trend data for ${commodityName}.`,
+      });
+      setTrendsData(prev => ({ ...prev, [commodityId]: null })); // Keep it null on error
+    } finally {
+      setIsLoading(false);
+    }
+  }, [toast, trendsData, isLoading]);
+
+  useEffect(() => {
+    const initialCommodity = trendCommodities.find(c => c.id === activeCommodity);
+    if (initialCommodity) {
+      loadTrendData(initialCommodity.id, initialCommodity.name);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Load initial data only once
+
+  const handleTabChange = (commodityId: string) => {
+    setActiveCommodity(commodityId);
+    const commodity = trendCommodities.find(c => c.id === commodityId);
+    if (commodity) {
+      loadTrendData(commodity.id, commodity.name);
+    }
+  };
+  
+  return (
+    <div className="container mx-auto py-8 px-4 md:px-6">
+      <h1 className="text-3xl font-bold mb-8 font-headline">Commodity Market Trends</h1>
+      
+      <Tabs defaultValue={activeCommodity} onValueChange={handleTabChange} className="w-full">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+          {trendCommodities.map((trend) => (
+            <TabsTrigger key={trend.id} value={trend.id}>
+              {trend.name}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+
+        {trendCommodities.map((trend) => (
+          <TabsContent key={trend.id} value={trend.id}>
+            {isLoading && trendsData[trend.id] === null ? (
+               <Card>
+                <CardHeader>
+                  <Skeleton className="h-7 w-1/3 mb-2" />
+                  <Skeleton className="h-4 w-1/2" />
+                </CardHeader>
+                <CardContent className="h-[300px] flex items-center justify-center">
+                  <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <p>Generating analysis for {trend.name}...</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : trendsData[trend.id] ? (
+              <MarketTrendChart trendData={trendsData[trend.id]!} />
+            ) : (
+               <Card>
+                <CardHeader>
+                    <CardTitle>{trend.name}</CardTitle>
+                    <CardDescription>No data available for {trend.name}.</CardDescription>
+                </CardHeader>
+                <CardContent className="h-[300px] flex flex-col items-center justify-center text-muted-foreground gap-4">
+                  <LineChart className="h-16 w-16" />
+                  <p>Could not load market trend data.</p>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+        ))}
+      </Tabs>
+       <Card className="mt-8 bg-accent/10 border-accent/30">
+        <CardHeader>
+          <CardTitle className="text-accent font-headline">Disclaimer</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-accent-foreground/80">
+            The market trend data provided is generated by an AI model for informational and demonstrative purposes only and should not be considered as financial advice. 
+            Prices are illustrative and may not reflect real-time market conditions. Always conduct your own research before making any trading decisions.
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
