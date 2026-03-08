@@ -51,8 +51,8 @@ jobs:
     steps:
       - name: update-k8s-deployment-config
         run: |
-          git clone https://${{ secrets.GITOPS_USERNAME }}:${{secrets.GITOPS_TOKEN}}@github.com/Daczy-Alpha/K8s-configurations.git
-          cd K8s-configurations
+          git clone https://${{ secrets.GITOPS_USERNAME }}:${{secrets.GITOPS_TOKEN}}@github.com/Daczy-Alpha/ledna-app-config.git
+          cd ledna-app-config
           cat ledna-app-deployment.yaml
           sed -i "s+487620625686.dkr.ecr.eu-north-1.amazonaws.com/salim-ledna-app:.*+487620625686.dkr.ecr.eu-north-1.amazonaws.com/salim-ledna-app:${{ github.run_number }}+g" ledna-app-deployment.yaml
           cat ledna-app-deployment.yaml
