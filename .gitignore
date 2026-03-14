@@ -49,3 +49,5 @@ firestore-debug.log
 /node_modules
 package*.json
 package.json
+
+/src/generated/prisma

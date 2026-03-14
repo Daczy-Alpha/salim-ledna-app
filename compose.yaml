@@ -1,0 +1,32 @@
+version: '3'
+services:
+  nextjs:
+    build: .
+    container_name: Lednacommodities
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild   
+          path: package.json 
+
+
+  db:
+    image: postgres:18-alpine
+    environment:
+      
+      - POSTGRES_PASSWORD=mypassword
+      
+    ports:
+      - "5432:5432"  
